@@ -44,13 +44,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    app.get("/products/:brandName", async (req, res) => {
-      const brandName = req.params.brandName;
-      const query = { brandName: { $regex: new RegExp(brandName, "i") } };
-      const cursor = productsCollection.find(query);
-      const products = await cursor.toArray();
-      res.send(products);
-    });
+    // brand name search
 
     app.get("/productDetails/:id", async (req, res) => {
       const id = req.params.id;
@@ -58,37 +52,7 @@ async function run() {
       const result = await productsCollection.findOne(query);
       res.send(result);
     });
-
-    app.get("/updateProduct/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await productsCollection.findOne(query);
-      res.send(result);
-    });
-
-    app.put("/products/:id", async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      const updatedProduct = req.body;
-      const product = {
-        $set: {
-          name: updatedProduct.name,
-          brandName: updatedProduct.brandName,
-          typeOfProduct: updatedProduct.typeOfProduct,
-          price: updatedProduct.price,
-
-          rating: updatedProduct.rating,
-          photo: updatedProduct.photo,
-        },
-      };
-      const result = await productsCollection.updateOne(
-        filter,
-        product,
-        options
-      );
-      res.send(result);
-    });
+    // update product
 
     // Store product related
 
@@ -97,13 +61,8 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    // store product in database
 
-    app.post("/storeProducts", async (req, res) => {
-      const storedProduct = req.body;
-      console.log(storedProduct);
-      const result = await storeProductsCollection.insertOne(storedProduct);
-      res.send(result);
-    });
     app.delete("/storeProducts/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
