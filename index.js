@@ -44,7 +44,14 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    // brand name search
+
+    app.get("/products/:brandName", async (req, res) => {
+      const brandName = req.params.brandName;
+      const query = { brandName: { $regex: new RegExp(brandName, "i") } };
+      const cursor = productsCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
+    });
 
     app.get("/productDetails/:id", async (req, res) => {
       const id = req.params.id;
