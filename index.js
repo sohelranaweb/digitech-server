@@ -92,6 +92,12 @@ async function run() {
     });
     // Store product related
 
+    app.post("/storeProducts", async (req, res) => {
+      const storedProduct = req.body;
+      console.log(storedProduct);
+      const result = await storeProductsCollection.insertOne(storedProduct);
+      res.send(result);
+    });
     app.get("/storeProducts", async (req, res) => {
       const cursor = storeProductsCollection.find();
       const result = await cursor.toArray();
